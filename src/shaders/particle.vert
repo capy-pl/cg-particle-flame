@@ -5,5 +5,5 @@ out vec3 texout;
 
 void main() {
     texout = tex;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 }

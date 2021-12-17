@@ -3,7 +3,6 @@ import * as Three from 'three';
 import vertexShader from './shaders/particle.vert'; 
 import fragmentShader from './shaders/particle.frag';
 
-
 const cornerNeighbors = [
   [ 1, 2, 4 ],
   [ 0, 5, 3 ],
@@ -54,57 +53,61 @@ export default class VolumetricFire {
   }
 
   loadTextureProfile(path) {
-    return new Promise((resolve, reject) => {
       const textureLoader = new Three.TextureLoader();
-      textureLoader.load(path, (texture) => {
-        resolve(texture);
-      });
-    });
+      return textureLoader.load(path);
   }
 
   loadTextureProfiles() {
     const fireprofile = this.loadTextureProfile(`${process.env.PUBLIC_URL}/firetex.png`);
     const noiseprofile = this.loadTextureProfile(`${process.env.PUBLIC_URL}/nzw.png`);
 
-    const profiles = Promise.all([fireprofile, noiseprofile]);
-    return profiles;
+    return {
+      fireprofile,
+      noiseprofile
+    };
   }
 
   toMesh() {
-    return this.loadTextureProfiles()
-              .then((pfs) => {
-                  const [noiseprofile, fireprofile] = pfs;
-                  const uniforms = {
-                    "noiseprofile" : {
-                      type: 't',
-                      value : noiseprofile,
-                    },
-                    "fireprofile" : {
-                      type: 't',
-                      value : fireprofile,
-                    },
-                    "time": {
-                      value : 1.0,
-                    }
-                  };
-                  
-                  this.material = new Three.ShaderMaterial({
-                    uniforms,
-                    vertexShader,
-                    fragmentShader,
-                    side: Three.DoubleSide,
-                    blending: Three.AdditiveBlending,
-                    transparent: true,
-                  });
+          const {noiseprofile, fireprofile} = this.loadTextureProfiles();
+          const uniforms = {
+            "noiseprofile" : {
+              type: 't',
+              value : noiseprofile,
+            },
+            "fireprofile" : {
+              type: 't',
+              value : fireprofile,
+            },
+            "time": {
+              value : 1.0,
+            }
+          };
+          
+          this.material = new Three.ShaderMaterial({
+            uniforms,
+            vertexShader,
+            fragmentShader,
+            side: Three.DoubleSide,
+            blending: Three.AdditiveBlending,
+            transparent: true,
+          });
 
-                  this.geometry = new Three.BufferGeometry();
-                  this.geometry.setIndex(new Three.BufferAttribute(this.index, 1));
-                  this.geometry.setAttribute('pos', new Three.BufferAttribute(this.position, 3));
-                  this.geometry.setAttribute('tex', new Three.BufferAttribute(this.tex, 3));
-                  
-                  this.mesh = new Three.Mesh(this.geometry, this.material);
+          this.geometry = new Three.BufferGeometry();
+          this.geometry.setIndex(new Three.BufferAttribute(this.index, 1));
+          this.geometry.setAttribute('pos', new Three.BufferAttribute(this.position, 3));
+          this.geometry.setAttribute('tex', new Three.BufferAttribute(this.tex, 3));
+          
+          this.mesh = new Three.Mesh(this.geometry, this.material);
 
-                  return this.mesh;
-              });
+          return this.mesh;
   }
+
+  update(elapsed) {
+    this.mesh.uniforms.value = elapsed;
+  }
+
+  slice() {
+
+  }
+
 }

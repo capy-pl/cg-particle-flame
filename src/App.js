@@ -42,12 +42,9 @@ class App extends React.PureComponent {
     
     const fire = new VolumetricFire(2, 4, 2, 2, 0.5);
 
-    fire
-      .toMesh()
-      .then((mesh) => {
-        scene.add(mesh);
-      });
-  
+    const mesh = fire.toMesh();
+    scene.add(mesh);
+
     const animate = function () {
       requestAnimationFrame( animate );
       renderer.render( scene, camera );
