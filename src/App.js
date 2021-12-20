@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Three from 'three';
 import VolumetricFire from './VolumetricFire';
-
+import OrbitControls from './OrbitContorls';
 class App extends React.PureComponent {
   componentDidMount() {
     const scene = new Three.Scene();
@@ -9,7 +9,9 @@ class App extends React.PureComponent {
     const renderer = new Three.WebGLRenderer({
       antialias: true,
     });
-    
+
+    const clock = new Three.Clock();
+
     camera.position.set(100, 100, 50);
     camera.up.set(0, 0, 1);
     camera.lookAt(0, 0, 0);
@@ -40,17 +42,25 @@ class App extends React.PureComponent {
         scene.add( line );
     }
     
-    const fire = new VolumetricFire(2, 4, 2, 2, 0.5);
+    const orbitControl = new OrbitControls(camera, document.querySelector("#main"));
 
-    const mesh = fire.toMesh();
-    scene.add(mesh);
+    const fire = new VolumetricFire(2, 4, 2, 2, 0.5, camera);
 
-    const animate = function () {
+    scene.add(fire.toMesh());
+
+    const animate = () => {
       requestAnimationFrame( animate );
+      const elapsed = clock.getElapsedTime();
+      fire.update(elapsed); 
+      orbitControl.update();
       renderer.render( scene, camera );
     };
 
     animate();
+
+    window.onresize = () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
   }
 
   render() {

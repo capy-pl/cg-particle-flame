@@ -26,20 +26,29 @@ const incomingEdges = [
 ];
 
 export default class VolumetricFire {
-  constructor(width, height, depth, sliceSpacing) {
+  constructor(width, height, depth, sliceSpacing, camera) {
 
     this.widthRadius = width * 0.5;
     this.heightRadius = height * 0.5;
     this.depthRadius = depth * 0.5;
     this.sliceSpacing = sliceSpacing;
-    // this.cornerPositions = this.getCornerPositions();
+    this.camera = camera;
+
+    this.posCorners = this.getCornerPositions();
+    this.textCorners = this.getTexCornerPositions();
+
+    this.viewVector = new Three.Vector3();
 
     this.index = new Uint16Array((width + height + depth) * 30);
     this.position = new Float32Array((width + height + depth) * 30 * 3);
     this.tex = new Float32Array((width + height + depth) * 30 * 3);
+
+    this.indexes = [];
+    this.points = [];
+    this.textCoordinates = [];
   }
 
-  getCornerPositions() {
+  getCornerPositions = () => {
     return [
       new Three.Vector3(-this.widthRadius, -this.heightRadius, -this.depthRadius),
       new Three.Vector3(this.widthRadius, -this.heightRadius, -this.depthRadius),
@@ -52,12 +61,25 @@ export default class VolumetricFire {
     ];
   }
 
-  loadTextureProfile(path) {
+  getTexCornerPositions = () => {
+    return [
+      new Three.Vector3(0, 0, 0),
+      new Three.Vector3(1, 0, 0),
+      new Three.Vector3(0, 1, 0),
+      new Three.Vector3(1, 1, 0),
+      new Three.Vector3(0, 0, 1),
+      new Three.Vector3(1, 0, 1),
+      new Three.Vector3(0, 1, 1),
+      new Three.Vector3(1, 1, 1),
+    ];
+  }
+
+  loadTextureProfile = (path) => {
       const textureLoader = new Three.TextureLoader();
       return textureLoader.load(path);
   }
 
-  loadTextureProfiles() {
+  loadTextureProfiles = () => {
     const fireprofile = this.loadTextureProfile(`${process.env.PUBLIC_URL}/firetex.png`);
     const noiseprofile = this.loadTextureProfile(`${process.env.PUBLIC_URL}/nzw.png`);
 
@@ -67,7 +89,7 @@ export default class VolumetricFire {
     };
   }
 
-  toMesh() {
+  toMesh = () => {
           const {noiseprofile, fireprofile} = this.loadTextureProfiles();
           const uniforms = {
             "noiseprofile" : {
@@ -102,12 +124,27 @@ export default class VolumetricFire {
           return this.mesh;
   }
 
-  update(elapsed) {
-    this.mesh.uniforms.value = elapsed;
+  update = (elapsed) => {
+    this.mesh.material.uniforms.value = elapsed;
   }
 
-  slice() {
+  updateGeometry = () => {
+    this.mesh.geometry.index.array.set(this.index);
+    this.mesh.geometry.attributes.pos.array.set(this.points);
+    this.mesh.geometry.attributes.tex.array.set(this.textCoordinates);
 
+    this.mesh.geometry.index.needsUpdate = true;
+    this.mesh.geometry.attributes.pos.needsUpdate = true;
+    this.mesh.geometry.attributes.text.needsUpdate = true;
+  }
+
+  slice = () => {
+    this.points = [];
+    this.textCoordinates = [];
+    this.indexes = [];
+
+    let i;
+    const cornerDistance0 = this.posCorners[0];
   }
 
 }

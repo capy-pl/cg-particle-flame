@@ -1,7 +1,7 @@
 attribute vec3 pos;
 attribute vec3 tex;
 
-out vec3 texout;
+varying vec3 texout;
 
 void main() {
     texout = tex;

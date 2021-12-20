@@ -1,6 +1,5 @@
 precision highp float;
 
-
 vec2 mBBS( vec2 val, float modulus ) {
     val = mod( val, modulus ); // For numerical consistancy.
     return mod(val * val, modulus);
