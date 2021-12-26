@@ -5,7 +5,7 @@ vec2 mBBS( vec2 val, float modulus ) {
     return mod(val * val, modulus);
 }
 
-uniform sampler2D noiseprofile;
+uniform sampler2D nzw;
 const float modulus = 61.0;  // Value used in pregenerated noise texture.
 
 float mnoise ( vec3 pos ) {
@@ -13,8 +13,8 @@ float mnoise ( vec3 pos ) {
     float fracArg = fract( pos.z );
     vec2 hash = mBBS( intArg * 3.0 + vec2( 0, 3 ), modulus );
     vec4 g = vec4 (
-        texture2D(noiseprofile, vec2( pos.x, pos.y + hash.x ) / modulus ).xy,
-        texture2D(noiseprofile, vec2( pos.x, pos.y + hash.y ) / modulus ).xy
+        texture2D(nzw, vec2( pos.x, pos.y + hash.x ) / modulus ).xy,
+        texture2D(nzw, vec2( pos.x, pos.y + hash.y ) / modulus ).xy
     ) * 2.0 - 1.0;
     return mix(
         g.x + g.y * fracArg,
@@ -40,7 +40,7 @@ float turbulence( vec3 pos ) {
 
 const float magnatude = 1.3;
 uniform float time;
-uniform sampler2D fireprofile;
+uniform sampler2D fireProfile;
 
 vec4 sampleFire( vec3 loc, vec4 scale ) {
     loc.xz = loc.xz * 2.0 - 1.0;
@@ -52,7 +52,7 @@ vec4 sampleFire( vec3 loc, vec4 scale ) {
     if ( st.y > 1.0 ) {
         return vec4( 0, 0, 0, 1 );
     }
-    vec4 result = texture2D( fireprofile, st );
+    vec4 result = texture2D( fireProfile, st );
     if ( st.y < 0.1 ) {
         result *= st.y / 0.1;
     }
@@ -63,5 +63,5 @@ varying vec3 texout;
 
 void main( void ) {
     vec3 color = sampleFire( texout, vec4( 1.0, 2.0, 1.0, 0.5 ) ).xyz;
-    gl_FragColor = vec4( color * 1.5, 1 );
+    gl_FragColor = vec4(color, 1 );
 }
