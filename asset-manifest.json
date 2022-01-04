@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/cg-particle-flame/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/cg-particle-flame/static/js/main.20321ed2.chunk.js",
+    "main.js.map": "/cg-particle-flame/static/js/main.20321ed2.chunk.js.map",
+    "runtime-main.js": "/cg-particle-flame/static/js/runtime-main.21f80aa8.js",
+    "runtime-main.js.map": "/cg-particle-flame/static/js/runtime-main.21f80aa8.js.map",
+    "static/js/2.f1c6c2d0.chunk.js": "/cg-particle-flame/static/js/2.f1c6c2d0.chunk.js",
+    "static/js/2.f1c6c2d0.chunk.js.map": "/cg-particle-flame/static/js/2.f1c6c2d0.chunk.js.map",
+    "static/js/3.de2ab6c1.chunk.js": "/cg-particle-flame/static/js/3.de2ab6c1.chunk.js",
+    "static/js/3.de2ab6c1.chunk.js.map": "/cg-particle-flame/static/js/3.de2ab6c1.chunk.js.map",
+    "index.html": "/cg-particle-flame/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/cg-particle-flame/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.f1c6c2d0.chunk.js.LICENSE.txt": "/cg-particle-flame/static/js/2.f1c6c2d0.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.21f80aa8.js",
+    "static/js/2.f1c6c2d0.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.20321ed2.chunk.js"
+  ]
+}
