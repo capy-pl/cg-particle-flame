@@ -5,7 +5,8 @@ import {
   randomDest,
   random2DVec,
   randomParticleVel,
-  unitDirection
+  unitDirection,
+  rgbArrToThreeColor,
 } from './util';
 
 import vertexShader from './shaders/particle.vert';
@@ -43,6 +44,8 @@ const MINIMUM_FADING_SPEED = 0.001;
 const MIN_CENTRALITY = 1;
 const DEFAULT_CENTRALITY = 5;
 const MAX_CENTRALITY = 10;
+
+const DEFAULT_RGB = [245.82, 102, 25];
 
 const DEFAULT_FIRE_HEIGHT = 10;
 
@@ -84,7 +87,10 @@ const ParticleOptions = {
     default: DEFAULT_FADING_SPEED,
     min: MINIMUM_FADING_SPEED,
     max: MAXIMUM_FADING_SPEED,
-  }
+  },
+  color: {
+    default: DEFAULT_RGB,
+  },
 };
 
 const PARTICLE_STATE = {
@@ -104,6 +110,7 @@ export default class ParticleFire {
       fadingSpeed: DEFAULT_FADING_SPEED,
       particleNum: DEFAULT_PARTICLE_NUM,
       centrality: DEFAULT_CENTRALITY,
+      color: DEFAULT_RGB,
     };
 
     this.bulkSetAttrs(options);
@@ -138,7 +145,7 @@ export default class ParticleFire {
         value: texture,
       },
       color: {
-        value: new Three.Color(0.964, 0.4, 0.1),
+        value: rgbArrToThreeColor(this.options.color),
       }
     };
 
@@ -153,13 +160,19 @@ export default class ParticleFire {
 
     this.material.blending = Three.CustomBlending;
     this.material.blendSrc = Three.SrcAlphaFactor;
-    this.material.blendDst = Three.OneFactor;
+    this.material.blendDst = Three.DstAlphaFactor;
+
     this.particleSystem = new Three.Points(this.geometry, this.material);
   }
 
   setAttr = (key, val) => {
     if (this.options.hasOwnProperty(key) && val && this.options[key] !== val) {
-      this.options[key] = val;
+      if (key === 'color') {
+        this.options[key] = rgbArrToThreeColor(val);
+        this.material.uniforms.color.value = this.options[key];
+      } else {
+        this.options[key] = val;
+      }
     }
   }
 

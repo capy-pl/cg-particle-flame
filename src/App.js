@@ -50,6 +50,19 @@ class App extends React.PureComponent {
     scene.add(particleFire.particleSystem);
     const axesHelper = new Three.AxesHelper(5);
 
+    // const geometry = new Three.PlaneGeometry( 10, 10);
+    // const material = new Three.MeshBasicMaterial( {color: 0x7d7d7d, side: Three.DoubleSide} );
+
+    // material.blending = Three.CustomBlending;
+    // material.blendSrc = Three.SrcAlphaFactor;
+    // material.blendDst = Three.ZeroFactor;
+
+    // const plane = new Three.Mesh( geometry, material );
+
+    // plane.translateY(-3);
+    // plane.rotateX(Math.PI / 2);
+
+    // scene.add( plane );
     // scene.add(axesHelper);
 
     const animate = () => {
@@ -77,7 +90,11 @@ class App extends React.PureComponent {
   configGUI = () => {
     const gui = new dat.GUI();
     for (let key in ParticleOptions) {
-      gui.add(this.options, key, ParticleOptions[key].min, ParticleOptions[key].max)
+      if (key === 'color') {
+        gui.addColor(this.options, key, ParticleOptions[key]);
+      } else {
+        gui.add(this.options, key, ParticleOptions[key].min, ParticleOptions[key].max)
+      }
     }
     return gui; 
   }

@@ -45,10 +45,16 @@ const unitDirection = (start, end) => {
   return new Three.Vector3().subVectors(end, start).normalize();
 };
 
+const rgbArrToThreeColor = (rgb) => {
+  rgb = rgb.map(v => v / 256);
+  return new Three.Color(rgb[0], rgb[1], rgb[2]);
+};
+
 export {
   randomDest,
   randomStart,
   random2DVec,
   randomParticleVel,
-  unitDirection
+  unitDirection,
+  rgbArrToThreeColor
 };
