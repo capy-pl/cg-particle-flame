@@ -1,15 +1,30 @@
 import React from 'react';
 import * as Three from 'three';
-import VolumetricFire from './VolumetricFire';
+import Stat from 'stats.js';
+import * as dat from 'dat.gui';
+
+import { Particle } from './ParticleFire';
 import {
-  FireParticle,
-  FireBall
-} from './ParticleFire';
+  ParticleOptions
+} from './ParticleFire/Particle';
+
 import OrbitControls from './OrbitContorls';
-import Grid from './Grid';
 
 class App extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.options = {};
+    for (let key in ParticleOptions) {
+      this.options[key] = ParticleOptions[key].default;
+    }
+  }
+
   componentDidMount() {
+
+    const gui = this.configGUI();
+
+    gui.show();
+
     const scene = new Three.Scene();
     const camera = new Three.PerspectiveCamera(60, window.innerWidth / window.innerHeight, .1, 1000);
     const renderer = new Three.WebGLRenderer({
@@ -17,34 +32,39 @@ class App extends React.PureComponent {
     });
 
     const clock = new Three.Clock();
+    clock.start();
+    const stats = new Stat();
+    stats.showPanel(0);
+    document.body.appendChild(stats.dom);
 
-    camera.position.set( 0, 0, 70);
-  
+    camera.position.set(10, 2, 0);
+    
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xffffff, 1);
+    // 0x0c0c0c
+    renderer.setClearColor(0x0c0c0c, 1);
     document.querySelector("#main").appendChild(renderer.domElement);
 
     const orbitControl = new OrbitControls(camera, document.querySelector("#main"));
-    const fireball = new FireBall();
-    const fireparticle = new FireParticle(500);
-    fireparticle.spawnParticle();
-    // scene.add(fireball.mesh);
-    scene.add(fireparticle.particleSystem);
-    // const fire = new VolumetricFire(7, 10, 2, 0.5, camera);
-    // fire.mesh.position.set( 0, 4 / 2, 0 );
-    // scene.add(fire.mesh);
+    const particleFire = new Particle();
+
+    scene.add(particleFire.particleSystem);
+    const axesHelper = new Three.AxesHelper(5);
+
+    // scene.add(axesHelper);
 
     const animate = () => {
-      requestAnimationFrame(animate);
-  
+      stats.begin();
       const elapsed = clock.getElapsedTime();
-      orbitControl.update();
-      fireparticle.update(elapsed * 6);
-      camera.lookAt( scene.position );
-  
-      // fire.update(elapsed);
 
+      orbitControl.update();
+
+      particleFire.bulkSetAttrs(this.options);
+      particleFire.update(elapsed);
+      camera.lookAt( particleFire.particleSystem.position );
+  
       renderer.render( scene, camera );
+      stats.end();
+      requestAnimationFrame(animate);
     };
 
     animate();
@@ -52,6 +72,14 @@ class App extends React.PureComponent {
     window.onresize = () => {
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
+  }
+
+  configGUI = () => {
+    const gui = new dat.GUI();
+    for (let key in ParticleOptions) {
+      gui.add(this.options, key, ParticleOptions[key].min, ParticleOptions[key].max)
+    }
+    return gui; 
   }
 
   render() {

@@ -1,11 +1,11 @@
-attribute size;
-attribute vec3 customColor;
+attribute float size;
+attribute float alpha;
 
-varying vec3 vColor;
+varying float v_alpha;
+
 void main() {
-    vColor = customColor;
-    vec4 worldPos = modelViewMatrix * vec4(position, 1.0);
-    float cameraDist = length(worldPos.xyz - position.xyz);
-    gl_PointSize = size * 300.0 / cameraDist;
-    gl_Position = projectionMatrix * worldPos;
+    vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    gl_PointSize = 600.0 * size / length(mvPos.xyz);
+    v_alpha = alpha;
 }
