@@ -48,8 +48,12 @@ class App extends React.PureComponent {
     const particleFire = new Particle();
 
     scene.add(particleFire.particleSystem);
-    const axesHelper = new Three.AxesHelper(5);
 
+    window.addEventListener('mousedown', (event) => {
+      event.preventDefault();
+      console.log(event.clientX);
+      console.log(event.clientY);
+    });
     // const geometry = new Three.PlaneGeometry( 10, 10);
     // const material = new Three.MeshBasicMaterial( {color: 0x7d7d7d, side: Three.DoubleSide} );
 

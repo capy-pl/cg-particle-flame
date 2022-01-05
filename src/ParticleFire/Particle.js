@@ -2,15 +2,14 @@ import * as Three from 'three';
 
 import {
   randomStart,
-  randomDest,
-  random2DVec,
   randomParticleVel,
-  unitDirection,
   rgbArrToThreeColor,
 } from './util';
 
+
 import vertexShader from './shaders/particle.vert';
 import fragmentShader from './shaders/particle.frag';
+import SimplexNoise from 'simplex-noise';
 
 const MINIMUM_PARTICLE_NUM = 100;
 const MAXIMUM_PARTICLE_NUM = 6000;
@@ -52,6 +51,8 @@ const DEFAULT_FIRE_HEIGHT = 10;
 // per second
 const DEFAULT_PARTICLE_SPAWN_SPEED = 1600;
 
+const WIND_LOCATION = new Three.Vector3(5, 1, 1);
+
 const ParticleOptions = {
   // particleNum: {
   //   default: MAXIMUM_PARTICLE_NUM,
@@ -91,6 +92,14 @@ const ParticleOptions = {
   color: {
     default: DEFAULT_RGB,
   },
+  wind: {
+    default: false,
+  },
+  windStrength: {
+    default: 5,
+    min: 1,
+    max: 10,
+  },
 };
 
 const PARTICLE_STATE = {
@@ -111,6 +120,8 @@ export default class ParticleFire {
       particleNum: DEFAULT_PARTICLE_NUM,
       centrality: DEFAULT_CENTRALITY,
       color: DEFAULT_RGB,
+      wind: false,
+      windStrength: 10,
     };
 
     this.bulkSetAttrs(options);
@@ -166,7 +177,7 @@ export default class ParticleFire {
   }
 
   setAttr = (key, val) => {
-    if (this.options.hasOwnProperty(key) && val && this.options[key] !== val) {
+    if (this.options.hasOwnProperty(key) && val !== undefined && this.options[key] !== val) {
       if (key === 'color') {
         this.options[key] = rgbArrToThreeColor(val);
         this.material.uniforms.color.value = this.options[key];
@@ -247,6 +258,8 @@ export default class ParticleFire {
   update = (elapsed) => {
     const pos = this.particleSystem.geometry.attributes.position.array;
     const alpha = this.particleSystem.geometry.attributes.alpha.array;
+    const noiseGen = new SimplexNoise(elapsed);
+
     const elapsedMs = elapsed - this.prevElapsed;
     this.prevElapsed = elapsed;
 
@@ -278,9 +291,31 @@ export default class ParticleFire {
       } else {
         const speed = this.speed[i] / 1000;
 
-        pos[index] += this.vel[index] * speed;
-        pos[index + 1] += this.vel[index + 1] * speed;
-        pos[index + 2] += this.vel[index + 2] * speed;
+        if (!this.options.wind) {
+          pos[index] += this.vel[index] * speed;
+          pos[index + 1] += this.vel[index + 1] * speed;
+          pos[index + 2] += this.vel[index + 2] * speed;  
+        } else {
+          const currentPos = new Three.Vector3(pos[index], pos[index + 1], pos[index + 2]);
+          const currentVel = new Three.Vector3(this.vel[index], this.vel[index + 1], this.vel[index + 2]);
+          const windDirect = new Three.Vector3().subVectors(WIND_LOCATION, currentPos);
+          const windStrength = windDirect.length();
+          const turbulence = noiseGen.noise3D(pos[index], 100, pos[index + 2]);
+
+          windDirect
+            .normalize()
+            .addScalar(turbulence)
+            .multiplyScalar(Math.tanh(this.options.windStrength / windStrength));
+
+          currentVel
+            .add(windDirect)
+            .normalize();
+
+          pos[index] += currentVel.x * speed;
+          pos[index + 1] += currentVel.y * speed;
+          pos[index + 2] += currentVel.z * speed;
+        }
+
 
         const fadeFactor = new Three.Vector2(pos[index], pos[index + 2]).length();
         alpha[i] -= this.options.fadingSpeed + Math.tanh(1.5 * fadeFactor) * 0.01;

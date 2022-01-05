@@ -1,4 +1,5 @@
 import * as Three from 'three';
+import noise from 'simplex-noise';
 
 const randomDest = () => {
   const randomEnd = new Three.Vector3();
