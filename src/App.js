@@ -49,11 +49,12 @@ class App extends React.PureComponent {
 
     scene.add(particleFire.particleSystem);
 
-    window.addEventListener('mousedown', (event) => {
-      event.preventDefault();
-      console.log(event.clientX);
-      console.log(event.clientY);
-    });
+    // window.addEventListener('mousedown', (event) => {
+    //   event.preventDefault();
+    //   const mouseVec = new Three.Vector2(event.clientX, event.clientY);
+    //   const mvPos = mouseVec.multiply(camera.projectionMatrixInverse.clone())
+
+    // });
     // const geometry = new Three.PlaneGeometry( 10, 10);
     // const material = new Three.MeshBasicMaterial( {color: 0x7d7d7d, side: Three.DoubleSide} );
 
@@ -96,7 +97,10 @@ class App extends React.PureComponent {
     for (let key in ParticleOptions) {
       if (key === 'color') {
         gui.addColor(this.options, key, ParticleOptions[key]);
-      } else {
+      } else if (key === 'texture') {
+        gui.add(this.options, key, ParticleOptions[key].options);
+      }
+      else {
         gui.add(this.options, key, ParticleOptions[key].min, ParticleOptions[key].max)
       }
     }

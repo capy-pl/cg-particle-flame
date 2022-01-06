@@ -11,18 +11,15 @@ import vertexShader from './shaders/particle.vert';
 import fragmentShader from './shaders/particle.frag';
 import SimplexNoise from 'simplex-noise';
 
-const MINIMUM_PARTICLE_NUM = 100;
 const MAXIMUM_PARTICLE_NUM = 6000;
 const DEFAULT_PARTICLE_NUM = 3000;
 
-const MAXIMUM_LIFETIME = 1;
-
 const DEFAULT_SIZE = 0.6;
 const MINIMUM_SIZE = 0.01
-const MAXIMUM_SIZE = 1;
+const MAXIMUM_SIZE = 4;
 
 const DEFAULT_SIZE_VARIANCE = 0.2;
-const MAX_SIZE_VARIANCE = 0.5;
+const MAX_SIZE_VARIANCE = 1;
 const MIN_SIZE_VARIANCE = 0.01;
 
 const DEFUALT_ALPHA = 0.6;
@@ -47,6 +44,19 @@ const MAX_CENTRALITY = 10;
 const DEFAULT_RGB = [245.82, 102, 25];
 
 const DEFAULT_FIRE_HEIGHT = 10;
+
+const DEFAULT_TEXTURE_OPTION = 'gradient.png';
+
+const TEXTURE_OPTIONS = [
+  'gradient.png',
+  'explosion.png',
+  'flame.png',
+  'symbol_02.png',
+  'flame_03.png',
+  'smoke_05.png',
+  'star_01.png',
+  'muzzle_02.png'
+];
 
 // per second
 const DEFAULT_PARTICLE_SPAWN_SPEED = 1600;
@@ -100,6 +110,10 @@ const ParticleOptions = {
     min: 1,
     max: 10,
   },
+  texture: {
+    default : DEFAULT_TEXTURE_OPTION,
+    options: TEXTURE_OPTIONS,
+  },
 };
 
 const PARTICLE_STATE = {
@@ -122,6 +136,7 @@ export default class ParticleFire {
       color: DEFAULT_RGB,
       wind: false,
       windStrength: 10,
+      texture: DEFAULT_TEXTURE_OPTION,
     };
 
     this.bulkSetAttrs(options);
@@ -182,6 +197,9 @@ export default class ParticleFire {
         this.options[key] = rgbArrToThreeColor(val);
         this.material.uniforms.color.value = this.options[key];
       } else {
+        if (key === 'texture') {
+          this.material.uniforms.tex.value = this.loadTexture(val);
+        }
         this.options[key] = val;
       }
     }

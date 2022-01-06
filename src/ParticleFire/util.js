@@ -1,5 +1,4 @@
 import * as Three from 'three';
-import noise from 'simplex-noise';
 
 const randomDest = () => {
   const randomEnd = new Three.Vector3();
@@ -7,9 +6,9 @@ const randomDest = () => {
   randomEnd.z = Three.MathUtils.randFloatSpread(2);
   randomEnd.y = 10;
   return randomEnd;
-}
+};
 
-// start is a sphere
+// randomly pick a position in a sphere
 const randomStart = () => {
   const vec = new Three.Vector3();
   const radius = 3;
@@ -21,7 +20,7 @@ const randomStart = () => {
   vec.y = 0.2 * Three.MathUtils.randFloat(0, radius * Math.cos(phi));
   vec.z = Three.MathUtils.randFloat(0, radius * Math.sin(phi) * Math.sin(theta));
   return vec;
-}
+};
 
 const randomParticleVel = (centrality) => {
   const vec = new Three.Vector3();
@@ -32,7 +31,7 @@ const randomParticleVel = (centrality) => {
   vec.z = Math.sin(zrad);
   vec.normalize();
   return vec;
-}
+};
 
 const random2DVec = (start, end) => {
   const pos = start.clone();
