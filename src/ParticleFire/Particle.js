@@ -55,7 +55,9 @@ const TEXTURE_OPTIONS = [
   'flame_03.png',
   'smoke_05.png',
   'star_01.png',
-  'muzzle_02.png'
+  'muzzle_02.png',
+  'heart.png',
+  'smile.png'
 ];
 
 // per second
