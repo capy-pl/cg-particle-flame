@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/cg-particle-flame/static/css/main.6dea0f05.chunk.css",
-    "main.js": "/cg-particle-flame/static/js/main.a24da3ce.chunk.js",
-    "main.js.map": "/cg-particle-flame/static/js/main.a24da3ce.chunk.js.map",
+    "main.js": "/cg-particle-flame/static/js/main.a62287cc.chunk.js",
+    "main.js.map": "/cg-particle-flame/static/js/main.a62287cc.chunk.js.map",
     "runtime-main.js": "/cg-particle-flame/static/js/runtime-main.2c96dd0a.js",
     "runtime-main.js.map": "/cg-particle-flame/static/js/runtime-main.2c96dd0a.js.map",
     "static/js/2.04e40dda.chunk.js": "/cg-particle-flame/static/js/2.04e40dda.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.2c96dd0a.js",
     "static/js/2.04e40dda.chunk.js",
     "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.a24da3ce.chunk.js"
+    "static/js/main.a62287cc.chunk.js"
   ]
 }
