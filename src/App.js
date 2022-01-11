@@ -49,27 +49,6 @@ class App extends React.PureComponent {
 
     scene.add(particleFire.particleSystem);
 
-    // window.addEventListener('mousedown', (event) => {
-    //   event.preventDefault();
-    //   const mouseVec = new Three.Vector2(event.clientX, event.clientY);
-    //   const mvPos = mouseVec.multiply(camera.projectionMatrixInverse.clone())
-
-    // });
-    // const geometry = new Three.PlaneGeometry( 10, 10);
-    // const material = new Three.MeshBasicMaterial( {color: 0x7d7d7d, side: Three.DoubleSide} );
-
-    // material.blending = Three.CustomBlending;
-    // material.blendSrc = Three.SrcAlphaFactor;
-    // material.blendDst = Three.ZeroFactor;
-
-    // const plane = new Three.Mesh( geometry, material );
-
-    // plane.translateY(-3);
-    // plane.rotateX(Math.PI / 2);
-
-    // scene.add( plane );
-    // scene.add(axesHelper);
-
     const animate = () => {
       stats.begin();
       const elapsed = clock.getElapsedTime();
