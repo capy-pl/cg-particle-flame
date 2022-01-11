@@ -18,9 +18,9 @@ const DEFAULT_SIZE = 0.6;
 const MINIMUM_SIZE = 0.01
 const MAXIMUM_SIZE = 4;
 
-const DEFAULT_SIZE_VARIANCE = 0.2;
+const DEFAULT_SIZE_VARIANCE = 0.5;
 const MAX_SIZE_VARIANCE = 1;
-const MIN_SIZE_VARIANCE = 0.01;
+const MIN_SIZE_VARIANCE = 0;
 
 const DEFUALT_ALPHA = 0.6;
 
@@ -29,8 +29,8 @@ const MAX_SPEED = 200;
 const MIN_SPEED = 50;
 
 
-const DEFAULT_SPEED_VARIANCE = 100;
-const MAX_SPEED_VARIANCE = 100;
+const DEFAULT_SPEED_VARIANCE = 0.5;
+const MAX_SPEED_VARIANCE = 1;
 const MIN_SPEED_VARIANCE = 0;
 
 const DEFAULT_FADING_SPEED = 0.0085;
@@ -265,8 +265,12 @@ export default class ParticleFire {
   createParticle = () => {
     const start = randomStart();
     const vel = randomParticleVel(this.options.centrality);
-    const speed = this.options.speed + Three.MathUtils.randFloatSpread(this.options.speedVarience);
-    const size = this.options.size + Three.MathUtils.randFloatSpread(this.options.sizeVarience);
+    const speed = this.options.speed + Three.MathUtils.randFloatSpread(
+      this.options.speed * this.options.speedVarience
+    );
+    const size = this.options.size + Three.MathUtils.randFloatSpread(
+      this.options.size * this.options.sizeVarience
+    );
     return {
       position: start,
       vel, 
