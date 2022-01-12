@@ -63,7 +63,7 @@ const TEXTURE_OPTIONS = [
 // per second
 const DEFAULT_PARTICLE_SPAWN_SPEED = 1600;
 
-const WIND_LOCATION = new Three.Vector3(5, 1, 1);
+const WIND_LOCATION = new Three.Vector3(0, 1, 4);
 
 const ParticleOptions = {
   // particleNum: {

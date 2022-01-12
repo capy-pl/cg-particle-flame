@@ -20,7 +20,6 @@ class App extends React.PureComponent {
   }
 
   componentDidMount() {
-
     const gui = this.configGUI();
 
     gui.show();
