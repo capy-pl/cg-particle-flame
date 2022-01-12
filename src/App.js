@@ -39,7 +39,6 @@ class App extends React.PureComponent {
     camera.position.set(10, 2, 0);
     
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // 0x0c0c0c
     renderer.setClearColor(0x0c0c0c, 1);
     document.querySelector("#main").appendChild(renderer.domElement);
 
