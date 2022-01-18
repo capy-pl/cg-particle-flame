@@ -8,8 +8,7 @@ The project is deployed to github pages. Please refer to this [link](https://cap
 
 ### Preivew
 
-![alt text](https://capy-pl.github.io/cg-particle-flame/volumetric_fire.gif)
-
+![alt text](https://raw.githubusercontent.com/capy-pl/cg-particle-flame/master/public/volumetric_fire.gif)
 
 ### References
 
