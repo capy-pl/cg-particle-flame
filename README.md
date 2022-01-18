@@ -10,6 +10,28 @@ The project is deployed as github page. Please refer to this [link](https://capy
 
 ![alt text](https://raw.githubusercontent.com/capy-pl/cg-particle-flame/master/public/volumetric_fire.gif)
 
+## Install
+
+Check following steps if you were to build this project in your local environment.
+
+1. Clone the project
+```bash
+git clone git@github.com:capy-pl/cg-particle-flame.git
+```
+
+2. Install dependencies
+```bash
+# I use yarn as package manager
+yarn
+```
+
+3. Start the development server
+```bash
+yarn start
+```
+
+The script will automatically open your default browser now, you should see the project. If not, enter ```localhost:3000``` in your browser.
+
 ## References
 
 These are some projects that I studied before I implemented my version. They are all really nice projects if you were to implement your own version, make sure you see these projects before.
